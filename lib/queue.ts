@@ -53,7 +53,11 @@ const TITLES: Record<string, string> = {
 async function notify(shop: Row, t: Row, kind: string, text: string) {
   await db()`insert into notifications (shop_id, ticket_id, kind, text) values (${shop.id}, ${t.id}, ${kind}, ${text})`;
   if (TITLES[kind]) {
-    await pushTicket(t.id, { title: `${TITLES[kind]} · ${shop.name}`, body: text, url: `/t/${t.token}`, tag: `t-${t.id}` });
+    try {
+      await pushTicket(t.id, { title: `${TITLES[kind]} · ${shop.name}`, body: text, url: `/t/${t.token}`, tag: `t-${t.id}` });
+    } catch (e) {
+      console.error('push falhou', e); // a fila nunca para por causa da notificação
+    }
   }
 }
 
