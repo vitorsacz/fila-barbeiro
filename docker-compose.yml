@@ -1,0 +1,26 @@
+# Postgres local para desenvolvimento. Produção usa o Neon.
+# Na primeira subida cria as tabelas (db/schema.sql) e os dados de exemplo (db/seed.sql).
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: fila-barbeiro-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fila
+      POSTGRES_PASSWORD: fila
+      POSTGRES_DB: fila
+      TZ: America/Sao_Paulo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fila -d fila"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  pgdata:

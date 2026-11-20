@@ -39,13 +39,22 @@ Next.js 15 (App Router) na Vercel · Postgres no Neon (`@neondatabase/serverless
 
 ## Rodar localmente
 
+Local usa um Postgres no Docker; produção usa o Neon. O app escolhe o driver sozinho pelo endereço da `DATABASE_URL` (`localhost` → `pg`, Neon → driver HTTP do Neon).
+
 ```bash
-cp .env.example .env.local   # preencha as variáveis
+cp .env.example .env.local   # já vem apontando para o Postgres local
 npm install
+npm run db:up                # sobe o Postgres e cria tabelas + dados de exemplo
 npm run dev
 ```
 
-O schema está em `db/schema.sql`.
+- Cliente: http://localhost:3000/f/salaodochico
+- Painel: http://localhost:3000/painel → `salaodochico`, PIN **1234**
+- Admin: http://localhost:3000/admin → senha **admin-local**
+
+Outros comandos: `npm run db:reset` (apaga tudo e recria do zero), `npm run db:psql` (abre o console do banco), `npm run db:down` (desliga).
+
+`db/seed.sql` só roda no Docker local. Nunca rode no Neon.
 
 ### Variáveis de ambiente
 

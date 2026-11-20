@@ -6,13 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d --wait",
+    "db:psql": "docker compose exec db psql -U fila -d fila"
   },
   "dependencies": {
     "@neondatabase/serverless": "1.2.1",
     "bcryptjs": "3.0.3",
     "jose": "6.2.18",
     "next": "15.5.29",
+    "pg": "^8.23.1",
     "qrcode": "1.5.4",
     "react": "19.3.1",
     "react-dom": "19.3.1",
@@ -20,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.6",
+    "@types/pg": "^8.23.1",
     "@types/qrcode": "1.5.6",
     "@types/react": "19.3.0",
     "@types/web-push": "3.6.4",
